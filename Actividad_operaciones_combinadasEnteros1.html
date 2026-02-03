@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Operaciones combinadas con enteros (material de apoyo)</title>
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{
+      --bg:#f6f9ff;
+      --card:#ffffff;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --brand:#1e4e79;
+      --soft:#d9f2ff;
+      --line:#e5e7eb;
+      --ok:#16a34a;
+      --bad:#e11d48;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, var(--bg), #ffffff);
+      color:var(--ink);
+    }
+    .wrap{max-width: 980px; margin: 24px auto; padding: 0 14px 40px;}
+    header{
+      background: var(--soft);
+      border: 2px solid var(--brand);
+      border-radius: 14px;
+      padding: 16px 16px 12px;
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+    }
+    h1{margin:0 0 6px; font-size: 20px; color: var(--brand);}
+    .note{margin:6px 0 0; color:var(--muted); font-size:14px; line-height:1.35;}
+    .pillHint{
+      display:inline-block; padding:2px 10px; border-radius:999px;
+      border:1px solid rgba(30,78,121,.35); background:rgba(30,78,121,.06);
+      color:var(--brand); font-size:12px; margin-right:6px; margin-top:6px;
+    }
+
+    .studentBox{
+      margin-top: 10px;
+      background: #fff;
+      border: 1px solid rgba(30,78,121,.25);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display:flex;
+      flex-wrap: wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .studentBox label{font-weight: 800; color: #111827; font-size: 13px;}
+    .studentInput{
+      width: 320px;
+      max-width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      outline:none;
+      font-size: 14px;
+    }
+    .studentInput.small{width: 160px;}
+    .studentInput:focus{
+      border-color: rgba(30,78,121,.6);
+      box-shadow: 0 0 0 4px rgba(30,78,121,.12);
+    }
+
+    .headerActions{
+      margin-top: 10px;
+      display:flex;
+      flex-wrap: wrap;
+      gap:10px;
+      align-items:center;
+    }
+
+    .grid{display:grid; grid-template-columns:1fr; gap:14px; margin-top:14px;}
+    @media (min-width: 900px){ .grid{grid-template-columns:1fr 1fr;} }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 10px 22px rgba(0,0,0,.06);
+      overflow:hidden;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .cardHead{
+      background: rgba(30,78,121,.08);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 14px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+    }
+    .title{font-weight: 900; color: var(--brand);}
+    .expr{
+      margin-top:6px;
+      background:#fff;
+      border:1px dashed rgba(30,78,121,.35);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height:1.35;
+    }
+    .small{font-size: 13px; color: var(--muted);}
+    .cardBody{padding: 12px 14px 14px;}
+
+    .lines{display:grid; gap:10px;}
+    .line{
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px 10px 8px;
+      background: #fff;
+    }
+    .lineLabel{font-weight: 900; font-size: 13px; margin-bottom: 6px; color:#111827;}
+
+    .latexRow{
+      display:flex;
+      flex-wrap: wrap;
+      align-items:center;
+      gap:10px;
+      line-height: 1.9;
+      font-size: 14px;
+    }
+    .afterEq{
+      flex-basis: 100%;
+      display:flex;
+      flex-wrap: wrap;
+      align-items:center;
+      gap:10px;
+      margin-top: 6px;
+    }
+
+    .in{
+      width: 56px;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      outline:none;
+      font-size: 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    .in:focus{
+      border-color: rgba(30,78,121,.6);
+      box-shadow: 0 0 0 4px rgba(30,78,121,.12);
+    }
+
+    .actions{
+      margin-top: 10px;
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items:center;
+    }
+    button{
+      border:0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-weight: 900;
+      cursor:pointer;
+      background: var(--brand);
+      color:#fff;
+      box-shadow: 0 10px 18px rgba(30,78,121,.18);
+    }
+    button.secondary{background:#111827; box-shadow: 0 10px 18px rgba(0,0,0,.14);}
+    button.ghost{background: transparent; border:1px solid rgba(30,78,121,.35); color:var(--brand); box-shadow:none;}
+
+    .statusWrap{display:flex; gap:10px; align-items:center;}
+    .status{
+      display:none;
+      align-items:center;
+      gap:10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 900;
+      border: 1.5px solid transparent;
+      background:#fff;
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+      user-select:none;
+    }
+    .status .icon{
+      width:22px; height:22px;
+      display:grid; place-items:center;
+      border-radius: 6px;
+      font-weight: 900;
+      line-height: 1;
+      font-size: 14px;
+    }
+    .status.ok{
+      border-color: rgba(22,163,74,.30);
+      color: var(--ok);
+      background: rgba(22,163,74,.10);
+    }
+    .status.ok .icon{background: rgba(22,163,74,.18); color: var(--ok);}
+    .status.bad{
+      border-color: rgba(225,29,72,.30);
+      color: var(--bad);
+      background: rgba(225,29,72,.10);
+    }
+    .status.bad .icon{background: rgba(225,29,72,.18); color: var(--bad);}
+
+    .help{
+      display:none;
+      margin-top: 10px;
+      border-radius: 14px;
+      border: 1px dashed rgba(30,78,121,.35);
+      background: rgba(217,242,255,.55);
+      padding: 10px 12px;
+      color:#0f172a;
+      font-size: 14px;
+      line-height:1.45;
+    }
+
+    footer{margin-top: 18px; text-align:center; color:var(--muted); font-size: 13px;}
+
+    @media print{
+      .noPrint{display:none !important;}
+      body{background:#fff;}
+      .wrap{margin:0; padding:0;}
+      header{box-shadow:none;}
+      .grid{grid-template-columns:1fr !important;}
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrap" id="pdfArea">
+
+  <header>
+    <h1>Operaciones combinadas con enteros (material de apoyo)</h1>
+    <div class="note">
+      <span class="pillHint">Cómo se hace</span>
+      En cada paso, reescribe la expresión completa y completa solo los huecos donde toca operar.
+      <br/>
+      <span class="pillHint">Importante</span> Para positivos se admite <b>3</b> o <b>+3</b>.
+    </div>
+
+    <div class="studentBox">
+      <label for="studentName">Nombre y apellidos:</label>
+      <input id="studentName" class="studentInput" placeholder="Escribe aquí..." />
+      <label for="studentClass">Curso:</label>
+      <input id="studentClass" class="studentInput small" placeholder="Ej.: 2º ESO A" />
+    </div>
+
+    <div class="headerActions noPrint">
+      <button type="button" id="btnPrint">Imprimir PDF</button>
+      <span class="small">Se guarda desde el cuadro de impresión (Guardar como PDF).</span>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <!-- ===================== EJERCICIO 1 ===================== -->
+    <section class="card" data-ex="ex1">
+      <div class="cardHead">
+        <div>
+          <div class="title">1) Operación 1</div>
+          <div class="expr">\(\;7^{2}-2^{3}\cdot \sqrt{36}+18:(-2)\;\)</div>
+        </div>
+        <div class="small">Línea a línea</div>
+      </div>
+
+      <div class="cardBody">
+        <div class="lines">
+          <div class="line">
+            <div class="lineLabel">Paso 1 · Sustituye potencias/raíces/división</div>
+            <div class="latexRow">
+              <span>\(\;\boxed{7^{2}}-\boxed{2^{3}}\cdot \boxed{\sqrt{36}}+\boxed{18:(-2)}\;=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="49" />
+                <span>\(\;-\;\)</span>
+                <input class="in" data-ans="8" />
+                <span>\(\cdot\)</span>
+                <input class="in" data-ans="6" />
+                <span>\(+\)</span>
+                <input class="in" data-ans="-9" />
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 2 · Multiplica (mantén lo demás)</div>
+            <div class="latexRow">
+              <span>\(\;49-\boxed{8\cdot 6}+(-9)=\)</span>
+              <div class="afterEq">
+                <span>\(\;49-\)</span>
+                <input class="in" data-ans="48" />
+                <span>\(\;+\;(-9)\)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 3 · Resta (mantén lo demás)</div>
+            <div class="latexRow">
+              <span>\(\;49-48+(-9)=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="1" />
+                <span>\(\;+\;(-9)\)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 4 · Resultado final</div>
+            <div class="latexRow">
+              <span>\(\;1+(-9)=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="-8" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions noPrint">
+          <button type="button" class="btn-check" data-exid="ex1">Comprobar</button>
+          <button type="button" class="ghost btn-help" data-exid="ex1">Ayuda</button>
+          <button type="button" class="secondary btn-reset" data-exid="ex1">Borrar</button>
+
+          <div class="statusWrap">
+            <div class="status ok" id="ex1-ok"><span class="icon">✓</span><span>¡Todo correcto!</span></div>
+            <div class="status bad" id="ex1-bad"><span class="icon">✕</span><span>Revisa algún hueco.</span></div>
+          </div>
+        </div>
+
+        <div class="help noPrint" id="ex1-help">
+          Pista: \(7^2=49\), \(2^3=8\), \(\sqrt{36}=6\) y \(18:(-2)=-9\).
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== EJERCICIO 2 ===================== -->
+    <section class="card" data-ex="ex2">
+      <div class="cardHead">
+        <div>
+          <div class="title">2) Operación 2</div>
+          <div class="expr">\(\;5\cdot 3^{2}+\sqrt{100}:2-(-3)^{2}\;\)</div>
+        </div>
+        <div class="small">Línea a línea</div>
+      </div>
+
+      <div class="cardBody">
+        <div class="lines">
+
+          <div class="line">
+            <div class="lineLabel">Paso 1 · Sustituye potencias/raíces</div>
+            <div class="latexRow">
+              <span>\(\;5\cdot 3^{2}+\sqrt{100}:2-(-3)^{2}=\)</span>
+              <div class="afterEq">
+                <span>\(\;5\cdot\)</span><input class="in" data-ans="9" />
+                <span>\(+\)</span><input class="in" data-ans="10" />
+                <span>\(:2-\)</span><input class="in" data-ans="9" />
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 2 · Multiplica y divide (mantén lo demás)</div>
+            <div class="latexRow">
+              <span>\(\;5\cdot 9+10:2-9=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="45" />
+                <span>\(+\)</span>
+                <input class="in" data-ans="5" />
+                <span>\(-9\)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 3 · Suma (mantén lo demás)</div>
+            <div class="latexRow">
+              <span>\(\;45+5-9=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="50" />
+                <span>\(-9\)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 4 · Resultado final</div>
+            <div class="latexRow">
+              <span>\(\;50-9=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="41" />
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="actions noPrint">
+          <button type="button" class="btn-check" data-exid="ex2">Comprobar</button>
+          <button type="button" class="ghost btn-help" data-exid="ex2">Ayuda</button>
+          <button type="button" class="secondary btn-reset" data-exid="ex2">Borrar</button>
+
+          <div class="statusWrap">
+            <div class="status ok" id="ex2-ok"><span class="icon">✓</span><span>¡Todo correcto!</span></div>
+            <div class="status bad" id="ex2-bad"><span class="icon">✕</span><span>Revisa algún hueco.</span></div>
+          </div>
+        </div>
+
+        <div class="help noPrint" id="ex2-help">
+          Pista: \(3^2=9\), \(\sqrt{100}=10\), \((-3)^2=9\). Luego \(10:2=5\).
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== EJERCICIO 3 ===================== -->
+    <section class="card" data-ex="ex3">
+      <div class="cardHead">
+        <div>
+          <div class="title">3) Operación 3</div>
+          <div class="expr">\(\;186:(-6)-\sqrt{25}\cdot (-2)^{2}+6\cdot 4\;\)</div>
+        </div>
+        <div class="small">Línea a línea</div>
+      </div>
+
+      <div class="cardBody">
+        <div class="lines">
+
+          <div class="line">
+            <div class="lineLabel">Paso 1 · Sustituye división/raíz/potencia</div>
+            <div class="latexRow">
+              <span>\(\;186:(-6)-\sqrt{25}\cdot (-2)^{2}+6\cdot 4=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="-31" />
+                <span>\(-\)</span>
+                <input class="in" data-ans="5" />
+                <span>\(\cdot\)</span>
+                <input class="in" data-ans="4" />
+                <span>\(+\)</span>
+                <input class="in" data-ans="24" />
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 2 · Multiplica (mantén lo demás)</div>
+            <div class="latexRow">
+              <span>\(\;-31-5\cdot 4+24=\)</span>
+              <div class="afterEq">
+                <span>\(\;-31-\)</span><input class="in" data-ans="20" />
+                <span>\(+24\)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 3 · Suma/resta (mantén lo demás)</div>
+            <div class="latexRow">
+              <span>\(\;-31-20+24=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="-51" />
+                <span>\(+24\)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 4 · Resultado final</div>
+            <div class="latexRow">
+              <span>\(\;-51+24=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="-27" />
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="actions noPrint">
+          <button type="button" class="btn-check" data-exid="ex3">Comprobar</button>
+          <button type="button" class="ghost btn-help" data-exid="ex3">Ayuda</button>
+          <button type="button" class="secondary btn-reset" data-exid="ex3">Borrar</button>
+
+          <div class="statusWrap">
+            <div class="status ok" id="ex3-ok"><span class="icon">✓</span><span>¡Todo correcto!</span></div>
+            <div class="status bad" id="ex3-bad"><span class="icon">✕</span><span>Revisa algún hueco.</span></div>
+          </div>
+        </div>
+
+        <div class="help noPrint" id="ex3-help">
+          Pista: \(186:(-6)=-31\), \(\sqrt{25}=5\), \((-2)^2=4\).
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== EJERCICIO 4 ===================== -->
+    <section class="card" data-ex="ex4">
+      <div class="cardHead">
+        <div>
+          <div class="title">4) Operación 4</div>
+          <div class="expr">\(\;(-3)^4:\sqrt{9}\cdot 5-18\cdot 4:(-2)^3\;\)</div>
+        </div>
+        <div class="small">Línea a línea</div>
+      </div>
+
+      <div class="cardBody">
+        <div class="lines">
+
+          <div class="line">
+            <div class="lineLabel">Paso 1 · Sustituye potencias/raíces</div>
+            <div class="latexRow">
+              <span>\(\;(-3)^4:\sqrt{9}\cdot 5-18\cdot 4:(-2)^3=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="81" />
+                <span>\(:\)</span>
+                <input class="in" data-ans="3" />
+                <span>\(\cdot 5-18\cdot 4:\)</span>
+                <input class="in" data-ans="-8" />
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 2 · Opera de izquierda a derecha (· y :)</div>
+            <div class="latexRow">
+              <span>\(\;81:3\cdot 5-18\cdot 4:(-8)=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="27" />
+                <span>\(\cdot 5-\)</span>
+                <input class="in" data-ans="-9" />
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 3 · Multiplica (mantén lo demás)</div>
+            <div class="latexRow">
+              <span>\(\;27\cdot 5-(-9)=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="135" />
+                <span>\(-(-9)\)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 4 · Resultado final</div>
+            <div class="latexRow">
+              <span>\(\;135-(-9)=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="144" />
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="actions noPrint">
+          <button type="button" class="btn-check" data-exid="ex4">Comprobar</button>
+          <button type="button" class="ghost btn-help" data-exid="ex4">Ayuda</button>
+          <button type="button" class="secondary btn-reset" data-exid="ex4">Borrar</button>
+
+          <div class="statusWrap">
+            <div class="status ok" id="ex4-ok"><span class="icon">✓</span><span>¡Todo correcto!</span></div>
+            <div class="status bad" id="ex4-bad"><span class="icon">✕</span><span>Revisa algún hueco.</span></div>
+          </div>
+        </div>
+
+        <div class="help noPrint" id="ex4-help">
+          Pista: \((-2)^3=-8\). En \(18\cdot 4:(-8)\) sale \(-9\).
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== EJERCICIO 5 ===================== -->
+    <section class="card" data-ex="ex5">
+      <div class="cardHead">
+        <div>
+          <div class="title">5) Operación 5</div>
+          <div class="expr">\(\;36\cdot \sqrt{4}:3^2-40:\sqrt{16}:(-5)\;\)</div>
+        </div>
+        <div class="small">Línea a línea</div>
+      </div>
+
+      <div class="cardBody">
+        <div class="lines">
+
+          <div class="line">
+            <div class="lineLabel">Paso 1 · Sustituye raíces y potencia</div>
+            <div class="latexRow">
+              <span>\(\;36\cdot \sqrt{4}:3^2-40:\sqrt{16}:(-5)=\)</span>
+              <div class="afterEq">
+                <span>\(\;36\cdot\)</span><input class="in" data-ans="2" />
+                <span>\(:\)</span><input class="in" data-ans="9" />
+                <span>\(-40:\)</span><input class="in" data-ans="4" />
+                <span>\(:(-5)\)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 2 · Opera de izquierda a derecha</div>
+            <div class="latexRow">
+              <span>\(\;36\cdot 2:9-40:4:(-5)=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="72" />
+                <span>\(:9-\)</span>
+                <input class="in" data-ans="-2" />
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 3 · Divide (mantén lo demás)</div>
+            <div class="latexRow">
+              <span>\(\;72:9-(-2)=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="8" />
+                <span>\(-(-2)\)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="lineLabel">Paso 4 · Resultado final</div>
+            <div class="latexRow">
+              <span>\(\;8-(-2)=\)</span>
+              <div class="afterEq">
+                <input class="in" data-ans="10" />
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="actions noPrint">
+          <button type="button" class="btn-check" data-exid="ex5">Comprobar</button>
+          <button type="button" class="ghost btn-help" data-exid="ex5">Ayuda</button>
+          <button type="button" class="secondary btn-reset" data-exid="ex5">Borrar</button>
+
+          <div class="statusWrap">
+            <div class="status ok" id="ex5-ok"><span class="icon">✓</span><span>¡Todo correcto!</span></div>
+            <div class="status bad" id="ex5-bad"><span class="icon">✕</span><span>Revisa algún hueco.</span></div>
+          </div>
+        </div>
+
+        <div class="help noPrint" id="ex5-help">
+          Pista: \(\sqrt{4}=2\), \(3^2=9\), \(\sqrt{16}=4\). Al final \(8-(-2)=8+2\).
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer><b>Material creado por Sergio Jodral Estepa</b></footer>
+</div>
+
+<script>
+  // ---------- utilidades ----------
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  // Acepta 3 o +3 para positivos
+  function parseStudentNumber(raw){
+    if(raw == null) return null;
+    let s = String(raw).trim();
+    if(s === "") return null;
+    s = s.replace(",", ".").replace(/\s+/g, "");
+    if(s.startsWith("+")) s = s.slice(1);
+    if(!/^[-]?\d+(\.\d+)?$/.test(s)) return NaN;
+    return Number(s);
+  }
+
+  function showStatus(exId, ok){
+    const okEl = document.getElementById(`${exId}-ok`);
+    const badEl = document.getElementById(`${exId}-bad`);
+    if(!okEl || !badEl) return;
+    okEl.style.display = ok ? "flex" : "none";
+    badEl.style.display = ok ? "none" : "flex";
+  }
+
+  function checkExercise(exId){
+    const card = document.querySelector(`section[data-ex="${exId}"]`);
+    if(!card) return;
+
+    const inputs = Array.from(card.querySelectorAll("input.in"));
+    let allOk = true;
+
+    inputs.forEach(inp => {
+      const expected = Number(inp.dataset.ans);
+      const got = parseStudentNumber(inp.value);
+      const ok = Number.isFinite(got) && got === expected;
+
+      inp.style.borderColor = ok ? "rgba(22,163,74,.55)" : "rgba(225,29,72,.55)";
+      inp.style.boxShadow = ok ? "0 0 0 4px rgba(22,163,74,.10)" : "0 0 0 4px rgba(225,29,72,.08)";
+      allOk = allOk && ok;
+    });
+
+    showStatus(exId, allOk);
+  }
+
+  function resetExercise(exId){
+    const card = document.querySelector(`section[data-ex="${exId}"]`);
+    if(!card) return;
+
+    card.querySelectorAll("input.in").forEach(inp => {
+      inp.value = "";
+      inp.style.borderColor = "#cbd5e1";
+      inp.style.boxShadow = "none";
+    });
+
+    const okEl = document.getElementById(`${exId}-ok`);
+    const badEl = document.getElementById(`${exId}-bad`);
+    if(okEl) okEl.style.display = "none";
+    if(badEl) badEl.style.display = "none";
+
+    const help = document.getElementById(`${exId}-help`);
+    if(help) help.style.display = "none";
+  }
+
+  function toggleHelp(exId){
+    const help = document.getElementById(`${exId}-help`);
+    if(!help) return;
+    help.style.display = (help.style.display === "block") ? "none" : "block";
+  }
+
+  // ✅ Imprime: abre una ventana “Entrega” y lanza imprimir automáticamente
+  function printPDF(){
+    const name = (document.getElementById("studentName").value || "").trim();
+    const course = (document.getElementById("studentClass").value || "").trim();
+
+    const area = document.getElementById("pdfArea");
+    const clone = area.cloneNode(true);
+
+    // Quitar lo no imprimible SOLO en el clon
+    clone.querySelectorAll(".noPrint").forEach(el => el.remove());
+
+    // Inputs de ejercicios -> texto
+    clone.querySelectorAll("input.in").forEach(inp => {
+      const span = document.createElement("span");
+      const val = (inp.value || "").trim();
+      span.textContent = val === "" ? "____" : val;
+      span.style.display = "inline-block";
+      span.style.minWidth = "34px";
+      span.style.padding = "2px 6px";
+      span.style.border = "1px solid #cbd5e1";
+      span.style.borderRadius = "8px";
+      span.style.background = "#fff";
+      span.style.fontFamily = "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace";
+      span.style.fontSize = "13px";
+      inp.replaceWith(span);
+    });
+
+    // Inputs de alumno -> texto fijo
+    const headerBox = clone.querySelector(".studentBox");
+    if(headerBox){
+      headerBox.innerHTML = `
+        <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; width:100%;">
+          <div style="font-weight:900;">Nombre y apellidos:</div>
+          <div style="padding:6px 10px; border:1px solid #cbd5e1; border-radius:10px; background:#fff; min-width:260px;">
+            ${name ? escapeHtml(name) : "____________________________"}
+          </div>
+          <div style="font-weight:900;">Curso:</div>
+          <div style="padding:6px 10px; border:1px solid #cbd5e1; border-radius:10px; background:#fff; min-width:140px;">
+            ${course ? escapeHtml(course) : "__________"}
+          </div>
+        </div>
+      `;
+    }
+
+    const w = window.open("", "_blank");
+    if(!w) return;
+
+    const styles = Array.from(document.querySelectorAll("style"))
+      .map(s => s.innerHTML).join("\n");
+
+    // HTML base (sin scripts dentro de strings)
+    w.document.open();
+    w.document.write('<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Entrega</title></head><body></body></html>');
+    w.document.close();
+
+    // estilos
+    const st = w.document.createElement("style");
+    st.textContent = styles + "\n@media print{ .grid{grid-template-columns:1fr !important;} }";
+    w.document.head.appendChild(st);
+
+    // contenido
+    const container = w.document.createElement("div");
+    container.className = "wrap";
+    container.innerHTML = clone.innerHTML;
+    w.document.body.appendChild(container);
+
+    // barra de acciones dentro (backup)
+    const actionWrap = w.document.createElement("div");
+    actionWrap.className = "wrap";
+    actionWrap.style.paddingTop = "0";
+    actionWrap.innerHTML = `
+      <div class="actions" style="margin-top:14px;">
+        <button id="doPrint">Imprimir / Guardar PDF</button>
+        <button class="ghost" id="doClose">Cerrar</button>
+      </div>
+      <div style="text-align:center; color:#6b7280; font-size:12px; margin-top:8px;">
+        En el cuadro de impresión elige “Guardar como PDF”.
+      </div>
+    `;
+    w.document.body.appendChild(actionWrap);
+
+    w.document.getElementById("doPrint").addEventListener("click", () => w.print());
+    w.document.getElementById("doClose").addEventListener("click", () => w.close());
+
+    // auto-print (si el navegador lo permite)
+    setTimeout(() => {
+      try { w.focus(); w.print(); } catch(e) {}
+    }, 450);
+  }
+
+  // ========= Delegación de eventos (robusto) =========
+  document.addEventListener("click", (e) => {
+    const t = e.target;
+
+    if (t && t.id === "btnPrint") { e.preventDefault(); printPDF(); return; }
+    if (t && t.classList && t.classList.contains("btn-check")) { e.preventDefault(); checkExercise(t.dataset.exid); return; }
+    if (t && t.classList && t.classList.contains("btn-help")) { e.preventDefault(); toggleHelp(t.dataset.exid); return; }
+    if (t && t.classList && t.classList.contains("btn-reset")) { e.preventDefault(); resetExercise(t.dataset.exid); return; }
+  });
+</script>
+</body>
+</html>
